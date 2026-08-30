@@ -1,27 +1,17 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O2 -Iinclude
-LDFLAGS_PTHREAD = -lpthread
-LDFLAGS_OPENMP = -fopenmp
+CFLAGS = -Wall -Wextra -O2 -std=c11
+LIBS = -fopenmp -lpthread
 
-OBJ_DIR = obj
-BIN_DIR = bin
+FONTES = main.c args.c mandelbrot.c io.c pthreads1.c pthreads2.c
+BINARIO = mandelbrot
 
-COMUM_SRC = src/args.c src/mandelbrot.c src/io.c
+all: $(BINARIO)
 
-all: serial openmp
-
-serial: $(BIN_DIR)/mandelbrot_serial
-
-$(BIN_DIR)/mandelbrot_serial: $(COMUM_SRC) src/serial.c
-	$(CC) $(CFLAGS) $(COMUM_SRC) src/serial.c -o $(BIN_DIR)/mandelbrot_serial
-
-openmp: $(BIN_DIR)/mandelbrot_openmp
-
-$(BIN_DIR)/mandelbrot_openmp: $(COMUM_SRC) src/openmp.c
-	$(CC) $(CFLAGS) $(LDFLAGS_OPENMP) $(COMUM_SRC) src/openmp.c -o $(BIN_DIR)/mandelbrot_openmp
+$(BINARIO): $(FONTES) mandelbrot.h
+	$(CC) $(CFLAGS) $(FONTES) -o $(BINARIO) $(LIBS)
 
 clean:
-	rm -f $(OBJ_DIR)/*.o $(BIN_DIR)/mandelbrot_serial $(BIN_DIR)/mandelbrot_openmp $(BIN_DIR)/mandelbrot_pthreads1 $(BIN_DIR)/mandelbrot_pthreads2
+	rm -f $(BINARIO)
 	rm -f *.pgm times.txt
 
-.PHONY: all serial clean
+.PHONY: all clean
