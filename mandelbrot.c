@@ -24,11 +24,17 @@ int mandelbrot_ponto(double cr, double ci, int max_iter) {
 }
 
 double coord_real(int x, const Params *p) {
+    if (p->largura <= 1) {
+        return REAL_MIN;
+    }
     double passo = (REAL_MAX - REAL_MIN) / (double)(p->largura - 1);
     return REAL_MIN + (double)x * passo;
 }
 
 double coord_imag(int y, const Params *p) {
+    if (p->altura <= 1) {
+        return IMAG_MIN;
+    }
     double passo = (IMAG_MAX - IMAG_MIN) / (double)(p->altura - 1);
     return IMAG_MIN + (double)y * passo;
 }
